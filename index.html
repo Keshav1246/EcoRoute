@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRoute — Urban Emission & Congestion Analytics Platform</title>
+    <meta name="description" content="EcoRoute: A Cloud-Based Data Engineering Solution for Delhi Air Quality Monitoring using AWS, Power BI, and advanced analytics.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Ambient Background Particles -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoRoute</span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#problem" class="nav-link">Problem</a></li>
+                <li><a href="#architecture" class="nav-link">Architecture</a></li>
+                <li><a href="#pipeline" class="nav-link">Pipeline</a></li>
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#findings" class="nav-link">Findings</a></li>
+                <li><a href="#challenges" class="nav-link">Challenges</a></li>
+                <li><a href="#future" class="nav-link">Future</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Data Engineering & Analytics — Cloud Project
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">EcoRoute</span>
+                <span class="title-gradient">Urban Emission &</span>
+                <span class="title-gradient">Congestion Analytics</span>
+            </h1>
+            <p class="hero-subtitle">
+                A cloud-native data engineering solution identifying urban emission hotspots across 
+                <strong>7 Delhi transit corridors</strong> using AWS infrastructure, real-time ETL pipelines, 
+                and Power BI analytics.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <span class="stat-value" data-target="1048712">0</span>
+                    <span class="stat-label">Data Points</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" data-target="7">0</span>
+                    <span class="stat-label">Monitoring Stations</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">2.51</span>
+                    <span class="stat-label">Peak ERS Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">$0</span>
+                    <span class="stat-label">AWS Cost (Free Tier)</span>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="#dashboard" class="btn btn-primary">
+                    <span>Explore Dashboard</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+            </div>
+            <div class="hero-team">
+                <span class="team-label">Project Team</span>
+                <span class="team-members">Kapil Bhati (23/IT/079) · Keshav Bansal (23/IT/082)</span>
+                <span class="team-supervisor">Supervisor: Dr. Seba Susan — Delhi Technological University</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">01 — The Challenge</span>
+                <h2 class="section-title">Delhi's Air Quality Crisis</h2>
+                <p class="section-desc">Delhi ranks among the world's most polluted cities, with PM2.5 levels frequently exceeding 300 μg/m³ — 5× the safe limit.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card problem-highlight">
+                    <div class="problem-icon">🏭</div>
+                    <h3>The Problem</h3>
+                    <p>Municipal planners lack tools to identify <strong>micro-level hotspots</strong> where interventions would have maximum impact. Existing solutions provide only city-level aggregates.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Ingest & Transform</h3>
+                    <p>Ingest and transform multi-source environmental telemetry data from traffic APIs and air quality sensors.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Identify Hotspots</h3>
+                    <p>Identify top emission hotspots across 7 key Delhi transit corridors with composite Emission Risk Score.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔗</div>
+                    <h3>Correlate Data</h3>
+                    <p>Correlate traffic congestion with air quality degradation using weighted scoring methodology.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📈</div>
+                    <h3>Executive Dashboards</h3>
+                    <p>Provide executive-level dashboards for municipal planners with real-time cross-filtering capabilities.</p>
+                </div>
+            </div>
+            <!-- ERS Formula -->
+            <div class="formula-card">
+                <h3>Emission Risk Score (ERS) Formula</h3>
+                <div class="formula">
+                    <code>ERS = (0.5 × PM2.5<sub>norm</sub>) + (0.3 × Congestion<sub>norm</sub>) + (0.2 × AQI<sub>norm</sub>)</code>
+                </div>
+                <div class="formula-weights">
+                    <div class="weight">
+                        <span class="weight-bar" style="--w: 50%; --c: var(--danger)"></span>
+                        <span class="weight-label">PM2.5 — 50%</span>
+                        <span class="weight-desc">Primary health indicator</span>
+                    </div>
+                    <div class="weight">
+                        <span class="weight-bar" style="--w: 30%; --c: var(--warning)"></span>
+                        <span class="weight-label">Congestion — 30%</span>
+                        <span class="weight-desc">Vehicle emissions correlator</span>
+                    </div>
+                    <div class="weight">
+                        <span class="weight-bar" style="--w: 20%; --c: var(--accent)"></span>
+                        <span class="weight-label">AQI — 20%</span>
+                        <span class="weight-desc">Composite air quality metric</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section section-dark" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">02 — System Design</span>
+                <h2 class="section-title">Cloud Architecture</h2>
+                <p class="section-desc">End-to-end serverless data pipeline following the AWS Medallion Architecture pattern.</p>
+            </div>
+            <div class="architecture-flow">
+                <div class="arch-stage" data-delay="0">
+                    <div class="arch-icon">📡</div>
+                    <div class="arch-content">
+                        <h4>Data Sources</h4>
+                        <p>TomTom Traffic API<br>OpenAQ Air Quality API<br>7 Delhi monitoring stations</p>
+                    </div>
+                    <div class="arch-tech">REST APIs</div>
+                </div>
+                <div class="arch-connector"><svg width="40" height="24" viewBox="0 0 40 24"><path d="M0 12h30M25 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+                <div class="arch-stage" data-delay="100">
+                    <div class="arch-icon">⚡</div>
+                    <div class="arch-content">
+                        <h4>AWS Lambda</h4>
+                        <p>Serverless ingestion<br>CloudWatch 15-min trigger<br>Auto-partitioned by date</p>
+                    </div>
+                    <div class="arch-tech">Python 3.14</div>
+                </div>
+                <div class="arch-connector"><svg width="40" height="24" viewBox="0 0 40 24"><path d="M0 12h30M25 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+                <div class="arch-stage" data-delay="200">
+                    <div class="arch-icon">🪣</div>
+                    <div class="arch-content">
+                        <h4>Amazon S3</h4>
+                        <p>Medallion Architecture<br>Bronze → Silver → Gold<br>Parquet format</p>
+                    </div>
+                    <div class="arch-tech">Data Lake</div>
+                </div>
+                <div class="arch-connector"><svg width="40" height="24" viewBox="0 0 40 24"><path d="M0 12h30M25 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+                <div class="arch-stage" data-delay="300">
+                    <div class="arch-icon">🔄</div>
+                    <div class="arch-content">
+                        <h4>AWS Glue</h4>
+                        <p>PySpark ETL jobs<br>Schema validation<br>ERS computation</p>
+                    </div>
+                    <div class="arch-tech">Apache Spark</div>
+                </div>
+                <div class="arch-connector"><svg width="40" height="24" viewBox="0 0 40 24"><path d="M0 12h30M25 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+                <div class="arch-stage" data-delay="400">
+                    <div class="arch-icon">🔍</div>
+                    <div class="arch-content">
+                        <h4>Amazon Athena</h4>
+                        <p>Serverless SQL queries<br>Glue Data Catalog<br>Pay-per-query</p>
+                    </div>
+                    <div class="arch-tech">ANSI SQL</div>
+                </div>
+                <div class="arch-connector"><svg width="40" height="24" viewBox="0 0 40 24"><path d="M0 12h30M25 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+                <div class="arch-stage" data-delay="500">
+                    <div class="arch-icon">📊</div>
+                    <div class="arch-content">
+                        <h4>Power BI</h4>
+                        <p>Interactive dashboards<br>DAX analytics<br>3-page report</p>
+                    </div>
+                    <div class="arch-tech">DirectQuery</div>
+                </div>
+            </div>
+
+            <!-- Medallion Architecture Detail -->
+            <div class="medallion-section">
+                <h3 class="medallion-title">Medallion Architecture Layers</h3>
+                <div class="medallion-grid">
+                    <div class="medallion-card bronze">
+                        <div class="medallion-badge">Bronze</div>
+                        <h4>Raw Data Layer</h4>
+                        <p>Raw JSON from APIs, partitioned by <code>year/month/day</code></p>
+                        <ul>
+                            <li>Traffic flow data (speed, congestion)</li>
+                            <li>AQI sensor readings (PM2.5, PM10, NO2)</li>
+                            <li>Auto-partitioned by Lambda</li>
+                        </ul>
+                    </div>
+                    <div class="medallion-card silver">
+                        <div class="medallion-badge">Silver</div>
+                        <h4>Cleaned Data Layer</h4>
+                        <p>Deduplicated, validated, enriched Parquet files</p>
+                        <ul>
+                            <li>Schema validation & type casting</li>
+                            <li>Null handling & outlier removal</li>
+                            <li>IST timestamp standardization</li>
+                        </ul>
+                    </div>
+                    <div class="medallion-card gold">
+                        <div class="medallion-badge">Gold</div>
+                        <h4>Analytics Layer</h4>
+                        <p>Aggregated, analytics-ready datasets</p>
+                        <ul>
+                            <li>Emission hotspot rankings</li>
+                            <li>Hourly trend analysis</li>
+                            <li>Spatial correlation tables</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Section with AWS Screenshots -->
+    <section class="section" id="pipeline">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">03 — Implementation</span>
+                <h2 class="section-title">Data Pipeline in Action</h2>
+                <p class="section-desc">Complete step-by-step AWS infrastructure setup — from budget configuration to analytics-ready data. All 18 screenshots document the real pipeline.</p>
+            </div>
+
+            <!-- Pipeline Steps Gallery -->
+            <div class="pipeline-timeline">
+
+                <!-- Step 1: Budget Setup -->
+                <div class="pipeline-step" data-step="1">
+                    <div class="step-marker">
+                        <span class="step-num">1</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>AWS Budget & Cost Management</h3>
+                        <p>First step: Set up <strong>AWS Budgets</strong> to monitor spending and ensure the project stays within the Free Tier. Alerts configured at $5 and $10 thresholds to prevent unexpected charges.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot screenshot-wide" onclick="openLightbox(this)">
+                                <img src="images/1. budgets.png" alt="AWS Budgets Configuration" loading="lazy">
+                                <span class="screenshot-label">AWS Budgets — Cost Alert Configuration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: IAM Roles & Security -->
+                <div class="pipeline-step" data-step="2">
+                    <div class="step-marker">
+                        <span class="step-num">2</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>IAM Roles & Security Configuration</h3>
+                        <p>Created dedicated IAM roles with <strong>least-privilege access</strong> policies for each AWS service. <code>ecoroute-lambda-role</code> handles ingestion permissions; <code>ecoroute-glue-role</code> manages ETL access to S3 and Glue Data Catalog.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/2. IAM Roles.png" alt="IAM Roles Overview" loading="lazy">
+                                <span class="screenshot-label">IAM Roles Overview</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/3. IAM roles policies.png" alt="IAM Role Policies" loading="lazy">
+                                <span class="screenshot-label">IAM Role Policies</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/4. ecoroute-lambda-role .png" alt="Lambda Role Detail" loading="lazy">
+                                <span class="screenshot-label">Lambda Role — Permissions Detail</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: S3 Data Lake -->
+                <div class="pipeline-step" data-step="3">
+                    <div class="step-marker">
+                        <span class="step-num">3</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>S3 Data Lake — Medallion Architecture</h3>
+                        <p>Three S3 buckets in <code>ap-south-1</code> (Mumbai) following the <strong>Bronze → Silver → Gold</strong> pattern. Raw JSON is ingested into Bronze, cleaned Parquet lands in Silver, and analytics-ready datasets populate Gold.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/5. Buckets.png" alt="S3 Buckets" loading="lazy">
+                                <span class="screenshot-label">S3 Buckets — Medallion Layers</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/6. bronze bucket.png" alt="Bronze Bucket" loading="lazy">
+                                <span class="screenshot-label">Bronze Bucket — Raw JSON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Sample Data Preview -->
+                <div class="pipeline-step" data-step="4">
+                    <div class="step-marker">
+                        <span class="step-num">4</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>Raw Data — Traffic & AQI Samples</h3>
+                        <p>Sample ingested data from the <strong>TomTom Traffic Flow API</strong> (speed, congestion, coordinates) and <strong>OpenAQ Air Quality API</strong> (PM2.5, PM10, AQI readings). Data is auto-partitioned by <code>year/month/day</code> in S3.</p>
+                        <div class="data-preview">
+                            <div class="preview-tab-group">
+                                <button class="preview-tab active" data-tab="traffic">Traffic Data (TomTom)</button>
+                                <button class="preview-tab" data-tab="aqi">AQI Data (OpenAQ)</button>
+                            </div>
+                            <div class="preview-panel active" id="tab-traffic">
+                                <img src="images/7. sample traffic data.png" alt="Sample Traffic Data" loading="lazy">
+                            </div>
+                            <div class="preview-panel" id="tab-aqi">
+                                <img src="images/8. sample aqi data.png" alt="Sample AQI Data" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Silver & Gold Buckets -->
+                <div class="pipeline-step" data-step="5">
+                    <div class="step-marker">
+                        <span class="step-num">5</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>Transformed Data — Silver & Gold Layers</h3>
+                        <p>After ETL processing, cleaned data is stored as <strong>Parquet files</strong> in the Silver bucket. The Gold bucket contains fully joined, analytics-ready datasets with computed ERS scores.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/9. silver bucket overview.png" alt="Silver Bucket Overview" loading="lazy">
+                                <span class="screenshot-label">Silver Bucket — Cleaned Data</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/10. silver bucket parquet file.png" alt="Silver Parquet File" loading="lazy">
+                                <span class="screenshot-label">Silver — Parquet File Structure</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/10.1 Gold Bucket.png" alt="Gold Bucket" loading="lazy">
+                                <span class="screenshot-label">Gold Bucket — Analytics Ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Lambda & EventBridge -->
+                <div class="pipeline-step" data-step="6">
+                    <div class="step-marker">
+                        <span class="step-num">6</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>Data Ingestion — Lambda & EventBridge Scheduling</h3>
+                        <p>AWS Lambda function triggered every <strong>15 minutes</strong> via Amazon EventBridge (CloudWatch Events). Each invocation fetches data from TomTom & OpenAQ APIs for all 7 monitoring stations and writes to the Bronze S3 bucket.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/11. trigger.png" alt="Lambda Trigger Configuration" loading="lazy">
+                                <span class="screenshot-label">Lambda — EventBridge Trigger</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/12. 15min schedule .png" alt="15-Minute Schedule" loading="lazy">
+                                <span class="screenshot-label">Schedule — Every 15 Minutes</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">Python — Lambda Ingestion Function</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><code># Lambda handler — fetch from TomTom & OpenAQ APIs
+def lambda_handler(event, context):
+    timestamp = datetime.now(ZoneInfo("Asia/Kolkata"))
+    partition = f"year={timestamp.year}/month={timestamp.month:02d}/day={timestamp.day:02d}"
+    
+    for location in DELHI_STATIONS:
+        traffic_data = fetch_tomtom_traffic(location['lat'], location['lon'])
+        aqi_data = fetch_openaq_data(location['lat'], location['lon'])
+        
+        s3.put_object(
+            Bucket='ecoroute-bronze',
+            Key=f"traffic/{partition}/{location['name']}_{timestamp.isoformat()}.json",
+            Body=json.dumps(traffic_data)
+        )</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7: Glue Crawler -->
+                <div class="pipeline-step" data-step="7">
+                    <div class="step-marker">
+                        <span class="step-num">7</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>AWS Glue Crawler — Schema Discovery</h3>
+                        <p>Glue Crawler automatically discovers and catalogs the data schema from S3, creating tables in the <strong>Glue Data Catalog</strong>. This enables Athena to query the data using standard SQL without manual table definitions.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/13. crawler.png" alt="AWS Glue Crawler" loading="lazy">
+                                <span class="screenshot-label">Glue Crawler — Schema Discovery</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/17. AWS Glue Tables.png" alt="Glue Data Catalog Tables" loading="lazy">
+                                <span class="screenshot-label">Glue Tables — Data Catalog</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 8: Glue ETL Jobs -->
+                <div class="pipeline-step" data-step="8">
+                    <div class="step-marker">
+                        <span class="step-num">8</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>ETL Transformation — AWS Glue PySpark Jobs</h3>
+                        <p>Two PySpark ETL jobs handle the data transformation pipeline. <strong>Bronze → Silver</strong> cleans, deduplicates, and standardizes timestamps. <strong>Silver → Gold</strong> performs spatial joins using the Haversine formula and computes the Emission Risk Score (ERS).</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/14. AWS Glue Jobs.png" alt="AWS Glue Jobs Overview" loading="lazy">
+                                <span class="screenshot-label">Glue Jobs — ETL Pipeline</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/15. Job ecoroute-bronze-to-silver.png" alt="Bronze to Silver Job" loading="lazy">
+                                <span class="screenshot-label">Job: Bronze → Silver</span>
+                            </div>
+                            <div class="screenshot" onclick="openLightbox(this)">
+                                <img src="images/16. Job ecoroute-silver-to-gold.png" alt="Silver to Gold Job" loading="lazy">
+                                <span class="screenshot-label">Job: Silver → Gold</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">PySpark — Spatial Join & ERS Computation</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><code># Haversine formula — spatial join within 15km radius
+joined = joined.withColumn('dist_km', (
+    F.acos(
+        F.sin(F.radians(F.col('latitude'))) * F.sin(F.radians(F.col('aqi_lat'))) +
+        F.cos(F.radians(F.col('latitude'))) * F.cos(F.radians(F.col('aqi_lat'))) *
+        F.cos(F.radians(F.col('aqi_lon') - F.col('longitude')))
+    ) * F.lit(6371)
+))
+
+# Emission Risk Score computation
+final = final.withColumn('ERS', F.round(
+    (F.col('congestion_score') * F.col('rush_weight')) + F.col('delta_aqi') / 50, 2
+))</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 9: Athena Query Engine -->
+                <div class="pipeline-step" data-step="9">
+                    <div class="step-marker">
+                        <span class="step-num">9</span>
+                    </div>
+                    <div class="step-content">
+                        <h3>Query Engine — Amazon Athena</h3>
+                        <p>Serverless SQL queries on the Gold layer via the Glue Data Catalog. Athena processes <strong>1,048,712 records</strong> to produce analytics-ready CSVs, which are exported to Power BI for interactive dashboards.</p>
+                        <div class="screenshot-gallery">
+                            <div class="screenshot screenshot-wide" onclick="openLightbox(this)">
+                                <img src="images/18. Athena Query Editor.png" alt="Athena Query Editor" loading="lazy">
+                                <span class="screenshot-label">Athena Query Editor — 1,048,712 Results</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">SQL — Top Emission Hotspots Query</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><code>-- Query the Gold layer for emission rankings
+SELECT location, 
+       ROUND(AVG(congestion_score), 2) AS avg_congestion,
+       ROUND(AVG(pm25), 2) AS avg_pm25,
+       aqi_category,
+       ROUND(AVG(ERS), 2) AS avg_emission_risk_score
+FROM   "ecoroute_db"."full_correlation"
+GROUP BY location, aqi_category
+ORDER BY avg_emission_risk_score DESC;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Dashboard Section -->
+    <section class="section section-dark" id="dashboard">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">04 — Analytics</span>
+                <h2 class="section-title">Interactive Dashboard</h2>
+                <p class="section-desc">Explore the emission data across Delhi's monitoring stations. Click on locations to filter all visualizations.</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-row">
+                <div class="kpi-card" id="kpi-avg-ers">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-value" id="kpi-avg-ers-value">1.72</div>
+                    <div class="kpi-label">Avg Emission Risk Score</div>
+                    <div class="kpi-trend up">Citywide Average</div>
+                </div>
+                <div class="kpi-card" id="kpi-peak-ers">
+                    <div class="kpi-icon">⚠️</div>
+                    <div class="kpi-value" id="kpi-peak-ers-value">2.51</div>
+                    <div class="kpi-label">Peak ERS (ITO)</div>
+                    <div class="kpi-trend danger">Highest Risk Zone</div>
+                </div>
+                <div class="kpi-card" id="kpi-worst-loc">
+                    <div class="kpi-icon">📍</div>
+                    <div class="kpi-value kpi-value-text" id="kpi-worst-loc-value">Rohini</div>
+                    <div class="kpi-label">Worst PM2.5 Location</div>
+                    <div class="kpi-trend danger">300 μg/m³</div>
+                </div>
+                <div class="kpi-card" id="kpi-sites">
+                    <div class="kpi-icon">🏙️</div>
+                    <div class="kpi-value" id="kpi-sites-value">7</div>
+                    <div class="kpi-label">Monitoring Stations</div>
+                    <div class="kpi-trend neutral">Active Locations</div>
+                </div>
+            </div>
+
+            <!-- Location Filter -->
+            <div class="filter-bar">
+                <span class="filter-label">Filter by Location:</span>
+                <div class="filter-chips" id="location-filters">
+                    <button class="filter-chip active" data-location="all">All Locations</button>
+                    <button class="filter-chip" data-location="ITO">ITO</button>
+                    <button class="filter-chip" data-location="Connaught Place">Connaught Place</button>
+                    <button class="filter-chip" data-location="Rohini">Rohini</button>
+                    <button class="filter-chip" data-location="Karol Bagh">Karol Bagh</button>
+                    <button class="filter-chip" data-location="Nehru Place">Nehru Place</button>
+                    <button class="filter-chip" data-location="Dwarka">Dwarka</button>
+                    <button class="filter-chip" data-location="Lajpat Nagar">Lajpat Nagar</button>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <!-- Leaderboard Bar Chart -->
+                <div class="chart-card chart-wide">
+                    <div class="chart-header">
+                        <h3>Emission Risk by Location — Worst to Best</h3>
+                        <span class="chart-badge">Leaderboard</span>
+                    </div>
+                    <div class="chart-body" id="leaderboard-chart"></div>
+                </div>
+
+                <!-- Scatter Plot -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>ERS vs Congestion Correlation</h3>
+                        <span class="chart-badge">Scatter Plot</span>
+                    </div>
+                    <div class="chart-body" id="scatter-chart">
+                        <canvas id="scatter-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- AQI Distribution Donut -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>AQI Category Distribution</h3>
+                        <span class="chart-badge">Distribution</span>
+                    </div>
+                    <div class="chart-body" id="donut-chart">
+                        <canvas id="donut-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Map Visualization -->
+                <div class="chart-card chart-wide">
+                    <div class="chart-header">
+                        <h3>Delhi Emission Hotspot Map</h3>
+                        <span class="chart-badge">Geospatial</span>
+                    </div>
+                    <div class="chart-body map-body" id="map-chart"></div>
+                </div>
+
+                <!-- PM2.5 vs ERS Comparison -->
+                <div class="chart-card chart-wide">
+                    <div class="chart-header">
+                        <h3>PM2.5 Level vs ERS — Dual Axis Comparison</h3>
+                        <span class="chart-badge">Combo Chart</span>
+                    </div>
+                    <div class="chart-body" id="combo-chart">
+                        <canvas id="combo-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table-section">
+                <div class="chart-header">
+                    <h3>Detailed Emission Metrics</h3>
+                    <span class="chart-badge">Data Table</span>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="metrics-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Location</th>
+                                <th>Avg ERS</th>
+                                <th>Avg PM2.5 (μg/m³)</th>
+                                <th>Avg Congestion</th>
+                                <th>Risk Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Findings -->
+    <section class="section" id="findings">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">05 — Insights</span>
+                <h2 class="section-title">Key Findings</h2>
+                <p class="section-desc">Actionable insights derived from the analysis of over 1 million data points.</p>
+            </div>
+            <div class="findings-grid">
+                <div class="finding-card finding-critical">
+                    <div class="finding-number">01</div>
+                    <div class="finding-body">
+                        <h3>ITO: The Critical Hotspot</h3>
+                        <p>ITO has the highest ERS of <strong>2.51</strong> despite moderate PM2.5 (159.59 μg/m³). Congestion is the dominant factor with avg score of <strong>2.07</strong>.</p>
+                        <div class="finding-insight">
+                            <span class="insight-tag">Recommendation</span>
+                            Traffic signal optimization and congestion pricing at this central junction would have outsized impact.
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card finding-warning">
+                    <div class="finding-number">02</div>
+                    <div class="finding-body">
+                        <h3>The Rohini Paradox</h3>
+                        <p>Rohini has the <strong>highest PM2.5 (300 μg/m³)</strong> — double the hazardous threshold — yet ranks 3rd in ERS due to low congestion (1.59).</p>
+                        <div class="finding-insight">
+                            <span class="insight-tag">Recommendation</span>
+                            Focus on industrial emission controls rather than traffic management.
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card finding-success">
+                    <div class="finding-number">03</div>
+                    <div class="finding-body">
+                        <h3>Lajpat Nagar — Best Performer</h3>
+                        <p>Lowest ERS of <strong>1.0</strong>, demonstrating that suburban areas have significantly lower combined emission risk.</p>
+                        <div class="finding-insight">
+                            <span class="insight-tag">Recommendation</span>
+                            Use as a best-practice benchmark for achieving low emission zones.
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card finding-info">
+                    <div class="finding-number">04</div>
+                    <div class="finding-body">
+                        <h3>151% ERS Variance</h3>
+                        <p>ERS ranges from 1.0 to 2.51 indicating <strong>significant spatial heterogeneity</strong> in emission patterns across Delhi.</p>
+                        <div class="finding-insight">
+                            <span class="insight-tag">Implication</span>
+                            Blanket citywide restrictions are inefficient. Zone-specific interventions are needed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Challenges -->
+    <section class="section section-dark" id="challenges">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">06 — Technical Deep Dive</span>
+                <h2 class="section-title">Technical Challenges & Solutions</h2>
+            </div>
+            <div class="challenges-grid">
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">📏</span>
+                        <h3>Haversine Radius Calibration</h3>
+                    </div>
+                    <p class="challenge-problem"><strong>Problem:</strong> Choosing the right spatial join radius for the Haversine formula. A <strong>5km radius</strong> matched too few AQI stations — most locations had sparse or no sensor data. A <strong>25km radius</strong> pulled in distant stations with no real correlation, diluting the data quality.</p>
+                    <p class="challenge-cause"><strong>Solution:</strong> After iterative testing, <strong>10km radius</strong> was the optimal balance — capturing enough nearby AQI stations for statistical significance while excluding unrelated far-away sensors.</p>
+                    <div class="radius-comparison">
+                        <div class="radius-option radius-bad">
+                            <span class="radius-value">5 km</span>
+                            <span class="radius-label">Too Small</span>
+                            <span class="radius-desc">Sparse data, missing stations</span>
+                        </div>
+                        <div class="radius-option radius-good">
+                            <span class="radius-value">10 km</span>
+                            <span class="radius-label">Optimal ✓</span>
+                            <span class="radius-desc">Strong correlation, sufficient coverage</span>
+                        </div>
+                        <div class="radius-option radius-bad">
+                            <span class="radius-value">25 km</span>
+                            <span class="radius-label">Too Large</span>
+                            <span class="radius-desc">Diluted data, unrelated stations</span>
+                        </div>
+                    </div>
+                    <div class="code-block code-block-small">
+                        <pre><code># Filter spatial join to 10km radius
+joined_filtered = joined.filter(F.col('dist_km') <= 10.0)
+# Result: 7 stations with 2-4 AQI sensors each</code></pre>
+                    </div>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">🔀</span>
+                        <h3>TOPN Tie-Breaker</h3>
+                    </div>
+                    <p class="challenge-problem"><strong>Problem:</strong> "Best AQI Location" KPI showed blank when multiple locations had identical PM2.5 (159.59).</p>
+                    <p class="challenge-cause"><strong>Root Cause:</strong> TOPN returned multiple rows; SELECTEDVALUE() returned BLANK().</p>
+                    <div class="code-block code-block-small">
+                        <pre><code>Best AQI Location = 
+CALCULATE(
+    MIN(Leaderboard[location]),  -- alphabetical tie-breaking
+    TOPN(1, ALL(Leaderboard), Leaderboard[avg_pm25], ASC)
+)</code></pre>
+                    </div>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">📐</span>
+                        <h3>Dual-Axis Scale</h3>
+                    </div>
+                    <p class="challenge-problem"><strong>Problem:</strong> PM2.5 (100-300) and ERS (0-10) on same chart squashed ERS line flat.</p>
+                    <p class="challenge-cause"><strong>Solution:</strong> Used Dual-Axis Combo Chart with independent Y-axes to preserve visual clarity for both metrics.</p>
+                    <div class="screenshot-gallery" style="margin-top:16px;">
+                        <div class="screenshot screenshot-wide" onclick="openLightbox(this)">
+                            <img src="images/dual_axis_scale.png" alt="Dual Axis Scale Comparison" loading="lazy">
+                            <span class="screenshot-label">Before (Single Axis) vs After (Dual Axis)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Scope -->
+    <section class="section" id="future">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">07 — Roadmap</span>
+                <h2 class="section-title">Future Enhancements</h2>
+                <p class="section-desc">Proposed extensions to scale EcoRoute into a production-ready urban monitoring platform.</p>
+            </div>
+            <div class="future-grid">
+                <div class="future-card">
+                    <div class="future-icon">🤖</div>
+                    <h3>ML Forecasting</h3>
+                    <p>AWS SageMaker for 7-day ahead ERS predictions using Random Forest. Initial experiments show <strong>82% accuracy</strong>.</p>
+                    <div class="future-status">Phase 2</div>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">🔴</div>
+                    <h3>Real-Time Streaming</h3>
+                    <p>Replace batch ETL with <strong>AWS Kinesis</strong> for sub-minute latency. Enable real-time municipal response.</p>
+                    <div class="future-status">Phase 2</div>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">📍</div>
+                    <h3>Expanded Coverage</h3>
+                    <p>Scale from 7 to <strong>50+ monitoring stations</strong> using IoT sensors across Delhi NCR.</p>
+                    <div class="future-status">Phase 3</div>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">🌤️</div>
+                    <h3>Weather Integration</h3>
+                    <p>Incorporate wind speed, humidity, temperature from <strong>OpenWeather API</strong> for better predictions.</p>
+                    <div class="future-status">Phase 3</div>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">📱</div>
+                    <h3>Mobile Dashboard</h3>
+                    <p>Power BI mobile layout for <strong>on-the-go</strong> municipal planners with push notifications.</p>
+                    <div class="future-status">Phase 2</div>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">🔔</div>
+                    <h3>Alert System</h3>
+                    <p><strong>AWS SNS</strong> notifications when ERS exceeds critical thresholds at any station.</p>
+                    <div class="future-status">Phase 2</div>
+                </div>
+            </div>
+            <!-- Cost Projection -->
+            <div class="cost-card">
+                <h3>💰 Cost & Scalability</h3>
+                <div class="cost-grid">
+                    <div class="cost-item">
+                        <span class="cost-value">~$15<small>/mo</small></span>
+                        <span class="cost-label">Current AWS Cost</span>
+                        <span class="cost-desc">S3 + Athena + Glue</span>
+                    </div>
+                    <div class="cost-arrow">→</div>
+                    <div class="cost-item">
+                        <span class="cost-value">~$120<small>/mo</small></span>
+                        <span class="cost-label">50-Station Scale</span>
+                        <span class="cost-desc">+ Kinesis + Lambda + DynamoDB</span>
+                    </div>
+                </div>
+                <p class="cost-note">Serverless pay-per-use model scales linearly without infrastructure management.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🌿</span>
+                    <span class="logo-text">EcoRoute</span>
+                    <p>Urban Emission & Congestion Analytics Platform</p>
+                </div>
+                <div class="footer-info">
+                    <h4>Project Details</h4>
+                    <p>Delhi Technological University<br>B.Tech IT, Semester VI, 2026<br>Data Engineering & Analytics</p>
+                </div>
+                <div class="footer-info">
+                    <h4>Team</h4>
+                    <p>Kapil Bhati (23/IT/079)<br>Keshav Bansal (23/IT/082)<br>Supervisor: Dr. Seba Susan</p>
+                </div>
+                <div class="footer-info">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">AWS S3</span>
+                        <span class="tech-tag">AWS Lambda</span>
+                        <span class="tech-tag">AWS Glue</span>
+                        <span class="tech-tag">Athena</span>
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">PySpark</span>
+                        <span class="tech-tag">DAX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 EcoRoute — Delhi Technological University. Built for academic purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
